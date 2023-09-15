@@ -20,9 +20,9 @@ class navbar extends StatelessWidget {
                 color: primarycolor,
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage('assets/images/cover.jpg'))),
+                 image: AssetImage('assets/images/cover.jpg'))),
           ),
-          ListTile(
+      ListTile(
             leading: Icon(Icons.home),
             title: Text('Home'),
             onTap: () => {Navigator.of(context).pop()},
@@ -43,12 +43,12 @@ class navbar extends StatelessWidget {
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
-            leading: Icon(Icons.border_color),
+            leading: Icon(Icons.attach_money),
             title: Text('Target'),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
+            leading: Icon(Icons.logout),
             title: Text('Logout'),
             onTap: () => {Navigator.of(context).pop()},
           ),

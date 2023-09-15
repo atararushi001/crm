@@ -16,8 +16,14 @@ class _home_pageState extends State<home_page> {
     return Scaffold(
       drawer: navbar(),
       appBar: AppBar(
-        title: Text('Matrix '),
+        title: Text('Matrix'),
+        actions: [
+          CircleAvatar(
+            backgroundImage: AssetImage('assets/img/profile.jpg'),
+          ),
+        ],
       ),
+
       body: Center(
         child: Text('Side Menu Tutorial'),
       ),

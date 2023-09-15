@@ -90,7 +90,7 @@ class _login_pageState extends State<login_page> {
                       "Login ",
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
-                  ),
+                 ),
                 ),
                 const SizedBox(
                   height: 10,

@@ -1,109 +1,197 @@
+import 'package:crm/screen/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class login_page extends StatefulWidget {
-  const login_page({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
-  @override
-  State<login_page> createState() => _login_pageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _login_pageState extends State<login_page> {
-  final formkey = GlobalKey<FormState>();
+class _LoginPageState extends State<LoginPage> {
+  final formKey = GlobalKey<FormState>();
   String email = "";
   String password = "";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
-          child: Form(
-            key: formkey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(height: 10),
-                Image.asset("assets/crmlogo.png"),
-                const SizedBox(
-                  height: 100,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                      labelText: "email",
-                      prefixIcon: Icon(
-                        Icons.email,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                  validator: (value) {
-                    return RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(value!)
-                        ? null
-                        : "please enter a valid email ";
-                  },
-                  onChanged: (val) {
-                    setState(() {
-                      email = val;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      labelText: "password",
-                      prefixIcon: Icon(
-                        Icons.lock,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                  validator: (value) {
-                    if (value!.length < 6) {
-                      return 'password must be at least 6 characters ';
-                    } else {
-                      return null;
-                    }
-                    return null;
-                  },
-                  onChanged: (val) {
-                    setState(() {
-                      password = val;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
+    const primaryColor = Color(0xff3553C0);
+    return StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              child: Form(
+                key: formKey,
+                child: Stack(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const SizedBox(height: 10),
+                    Column(
+                      mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
+                      children: [
+                        Image.asset(
+                          "assets/img/crmlogo.png",
+                          width: 200,
+                          height: 200,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.all(0),
+                          padding: const EdgeInsets.all(0),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white, width: 2),
+                                  ),
+                                  labelText: "email",
+                                  prefixIcon: Icon(
+                                    Icons.email,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                                validator: (value) {
+                                  return RegExp(
+                                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                          .hasMatch(value!)
+                                      ? null
+                                      : "please enter a valid email ";
+                                },
+                                onChanged: (val) {
+                                  setState(() {
+                                    email = val;
+                                  });
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              TextFormField(
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  labelText: "password",
+                                  prefixIcon: Icon(
+                                    Icons.lock,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value!.length < 6) {
+                                    return 'password must be at least 6 characters ';
+                                  } else {
+                                    return null;
+                                  }
+                                  return null;
+                                },
+                                onChanged: (val) {
+                                  setState(() {
+                                    password = val;
+                                  });
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
+                                  ),
+                                  onPressed: () {
+                                    login();
+                                  },
+                                  child: const Text(
+                                    "Login ",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    onPressed: () {
-                      login();
-                    },
-                    child: const Text(
-                      "Login ",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                 ),
+                  ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        });
+  }
+
+  void userLogedin() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => const home_page(),
       ),
     );
   }
 
-  void login() {
-    if (formkey.currentState!.validate()) {}
+  void login() async {
+    if (formKey.currentState!.validate()) {
+      print(email);
+      try {
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
+        userLogedin();
+      } on FirebaseAuthException catch (e) {
+        print(e.code);
+        if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text("Login Unsuccessful"),
+              content: const Text("Please recheck Login ID and Password"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                  child: Container(
+                    color: Colors.green,
+                    padding: const EdgeInsets.all(14),
+                    child: const Text("DONE"),
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else if (e.code == 'wrong-password') {
+          // print('Wrong password provided for that user.');
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text("Login Unsuccessful"),
+              content: const Text("Please recheck  Password"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                  child: Container(
+                    color: Colors.green,
+                    padding: const EdgeInsets.all(14),
+                    child: const Text("DONE"),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      }
+    }
   }
 }

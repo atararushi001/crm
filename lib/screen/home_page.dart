@@ -32,16 +32,18 @@ class _home_pageState extends State<home_page> {
           ),
         ],
       ),
-      body: Column(
+      body:Column(
         children: [
           Center(
           child: Container(
+            margin: EdgeInsets.only(top: 50.0),
 
-            width: 200,
+            width: 320,
             height: 100,
             color: Colors.blue,
 
             child: Center(
+
               child: Text(
                 'Target',
                 style: TextStyle(
@@ -52,7 +54,123 @@ class _home_pageState extends State<home_page> {
             ),
           ),
           ),
+          SizedBox(height: 20.0), // Add spacing between rows
+
+          // Row 1
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 150,
+                height: 100,
+                color: Colors.black12,
+                child: Center(
+                  child: Text(
+                    'Sales',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 20.0), // Add spacing between columns
+              Container(
+                width: 150,
+                height: 100,
+                color: Colors.green,
+                child: Center(
+                  child: Text(
+                    'Item 2',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+    // Add spacing between rows
+          SizedBox(height: 20.0), // Add spacing between rows
+
+          // Row 1
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 150,
+                height: 100,
+                color: Colors.red,
+                child: Center(
+                  child: Text(
+                    'Item 3',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 20.0), // Add spacing between columns
+              Container(
+                width: 150,
+                height: 100,
+                color: Colors.green,
+                child: Center(
+                  child: Text(
+                    'Item 4',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20.0), // Add spacing between rows
+       // Add spacing between rows
+
+          // Row 1
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 150,
+                height: 100,
+                color: Colors.red,
+                child: Center(
+                  child: Text(
+                    'Item 5',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 20.0), // Add spacing between columns
+              Container(
+                width: 150,
+                height: 100,
+                color: Colors.green,
+                child: Center(
+                  child: Text(
+                    'Item 6',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20.0), // Add spacing between rows
+
         ],
+
       ),
     );
   }

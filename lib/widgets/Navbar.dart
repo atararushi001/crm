@@ -35,6 +35,11 @@ class navbar extends StatelessWidget {
             onTap: () => {},
           ),
           ListTile(
+            leading: Icon(Icons.card_travel_sharp),
+            title: Text('Product'),
+            onTap: () => {},
+          ),
+          ListTile(
             leading: Icon(Icons.add_business_rounded),
             title: Text('Routes'),
             onTap: () => {Navigator.of(context).pop()},

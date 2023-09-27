@@ -29,99 +29,137 @@ class _LoginPageState extends State<LoginPage> {
                   // crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     const SizedBox(height: 10),
-                    Column(
-                      mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
-                      children: [
-                        Image.asset(
-                          "assets/img/crmlogo.png",
-                          width: 200,
-                          height: 200,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(0),
-                          padding: const EdgeInsets.all(0),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(30.0),
+                    Container(
+                      color: Colors.blue,
+                      child: Column(
+
+                        mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
+                        children: [
+                          Image.asset(
+                            "assets/img/crmlogo.png",
+                            width: 200,
+                            height: 200,
                           ),
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  enabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.white, width: 2),
-                                  ),
-                                  labelText: "email",
-                                  prefixIcon: Icon(
-                                    Icons.email,
-                                    color: Theme.of(context).primaryColor,
+                          Container(
+                            margin: const EdgeInsets.all(0),
+                            padding: const EdgeInsets.all(0),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            child: Column(
+
+                              children: [
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                                Text("Welcome Back" , textAlign: TextAlign.left, style: TextStyle(color: primaryColor, fontSize: 30,fontWeight: FontWeight.bold),),
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                                Container(
+                                  width: 500.0,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+
+                                      labelText: "email",
+                                      prefixIcon: Icon(
+                                        Icons.email,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      return RegExp(
+                                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                              .hasMatch(value!)
+                                          ? null
+                                          : "please enter a valid email ";
+                                    },
+                                    onChanged: (val) {
+                                      setState(() {
+                                        email = val;
+                                      });
+                                    },
                                   ),
                                 ),
-                                validator: (value) {
-                                  return RegExp(
-                                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                          .hasMatch(value!)
-                                      ? null
-                                      : "please enter a valid email ";
-                                },
-                                onChanged: (val) {
-                                  setState(() {
-                                    email = val;
-                                  });
-                                },
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              TextFormField(
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                  labelText: "password",
-                                  prefixIcon: Icon(
-                                    Icons.lock,
-                                    color: Theme.of(context).primaryColor,
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  width: 500.0,
+                                  child: TextFormField(
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+
+                                      labelText: "password",
+                                      prefixIcon: Icon(
+                                        Icons.lock,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value!.length < 6) {
+                                        return 'password must be at least 6 characters ';
+                                      } else {
+                                        return null;
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (val) {
+                                      setState(() {
+                                        password = val;
+                                      });
+                                    },
                                   ),
                                 ),
-                                validator: (value) {
-                                  if (value!.length < 6) {
-                                    return 'password must be at least 6 characters ';
-                                  } else {
-                                    return null;
-                                  }
-                                  return null;
-                                },
-                                onChanged: (val) {
-                                  setState(() {
-                                    password = val;
-                                  });
-                                },
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
-                                  ),
-                                  onPressed: () {
-                                    login();
-                                  },
-                                  child: const Text(
-                                    "Login ",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 16),
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                                SizedBox(
+                                  width: 200,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                    ),
+                                    onPressed: () {
+                                      login();
+                                    },
+                                    child: const Text(
+                                      "Login ",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 16),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                SizedBox(
+                                  width: 200,
+                                  child: ElevatedButton.icon(
+                                    onPressed: (){
+
+                                    },
+                                    icon: Image.asset(
+                                      "assets/img/google.png",
+                                      width: 20,
+                                    ),
+                                    label: Text('Sign in with Google'),
+                                    style: ElevatedButton.styleFrom(
+                                      primary:   Theme.of(context).primaryColor,// Change the button's background color
+                                      onPrimary: Colors.white, // Change the text color
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),

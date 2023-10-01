@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/Navbar.dart';
 import '../widgets/widgets.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class add_sr extends StatefulWidget {
   const add_sr({super.key});
@@ -23,15 +25,7 @@ class _add_srState extends State<add_sr> {
   final FocusNode addressFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   @override
-  // void dispose() {
-  //   // Dispose of the controllers when they are no longer needed to prevent memory leaks.
-  //   nameController.dispose();
-  //   emailController.dispose();
-  //   headquarterController.dispose();
-  //   addressController.dispose();
-  //   passwordController.dispose();
-  //   super.dispose();
-  // }
+
   @override
   Widget build(BuildContext context) {
     theme: ThemeData(
@@ -52,7 +46,7 @@ class _add_srState extends State<add_sr> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: primarycolor,
-        title: Text(
+        title: const Text(
           'Matrix',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
@@ -187,14 +181,14 @@ class _add_srState extends State<add_sr> {
                       backgroundColor: primarycolor,
                     ),
                     onPressed: () {
+
                       final nameValue = nameController.text;
                       final emailValue = emailController.text;
                       final headquarterValue = headquarterController.text;
                       final addressValue = addressController.text;
                       final passwordValue = passwordController.text;
-
-                      // Validate and perform the desired action
                       if (formkey.currentState!.validate()) {
+                        Add_srdata();
                       }
                     },
                     child: const Text(
@@ -213,4 +207,50 @@ class _add_srState extends State<add_sr> {
       ),
     );
   }
+  Future<int> getLastUserId() async {
+    final DocumentSnapshot lastUserIdDoc = await FirebaseFirestore.instance.collection('metadata').doc('lastUserId').get();
+    if (lastUserIdDoc.exists) {
+      final data = lastUserIdDoc.data() as Map<String, dynamic>; // Cast to Map<String, dynamic>
+      return data['user_id'] ?? 0; // Use the 'user_id' field or default to 0 if it's null
+    } else {
+      return 0; // Default starting user_id
+    }
+  }
+
+  Future<void> updateLastUserId(int newUserId) async {
+    await FirebaseFirestore.instance.collection('metadata').doc('lastUserId').set({'user_id': newUserId});
+  }
+
+  Add_srdata() async {
+
+    final UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+    final String? uiduserdata = userCredential.user?.uid;
+    // Retrieve the last used user_id
+    int lastUserId = await getLastUserId();
+
+
+
+    // Create a reference to the 'user' collection and specify the user_id
+    CollectionReference usersCollection = FirebaseFirestore.instance.collection('user');
+
+    // Add the new document with an incremented user_id
+    await usersCollection.add({
+      'user_id': lastUserId + 1,
+      'name': nameController.text,
+      'email': emailController.text,
+      'headquarter': headquarterController.text,
+      'address': addressController.text,
+      'password': passwordController.text,
+      'user_uid' : uiduserdata,
+      'user_type' : 2
+    });
+
+    // Update the last used user_id
+    await updateLastUserId(lastUserId + 1);
+  }
+
+
 }

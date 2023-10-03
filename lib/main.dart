@@ -1,3 +1,4 @@
+import 'package:crm/screen/Route_list.dart';
 import 'package:crm/screen/add_sr.dart';
 import 'package:crm/screen/home_page.dart';
 import 'package:crm/screen/list_of_sr.dart';
@@ -20,6 +21,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {
+         '/home': (context) => Home_page(),
+        '/login': (context) => LoginPage(),
+        '/Sr_list': (context) => Sr_list(),
+        '/add_sr': (context) =>Add_sr(),
+        '/Sr_list': (context) => Sr_list(),
+        '/route_list': (context) => Route_list(),
+
+      },
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -41,7 +51,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: Sr_list(),
+      home: Add_sr(),
     );
   }
 }

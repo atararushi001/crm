@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../widgets/Navbar.dart';
 
-class home_page extends StatefulWidget {
-  const home_page({super.key});
+class Home_page extends StatefulWidget {
+  const Home_page({super.key});
 
   @override
-  State<home_page> createState() => _home_pageState();
+  State <Home_page> createState() => _home_pageState();
 }
 
-class _home_pageState extends State<home_page> {
+class _home_pageState extends State<Home_page> {
   @override
   Widget build(BuildContext context) {
+
     var countgrid = 0;
     var primarycolor = Color(0xff3553C0);
     return Scaffold(

@@ -173,14 +173,14 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (ctx) => const home_page(),
+        builder: (ctx) => const Home_page(),
       ),
     );
   }
 
   void login() async {
     if (formKey.currentState!.validate()) {
-      print(email);
+      // print(email);
       try {
         final credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);

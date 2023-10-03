@@ -5,15 +5,29 @@ import '../widgets/Navbar.dart';
 import '../widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-class add_sr extends StatefulWidget {
-  const add_sr({super.key});
+import 'package:image_picker/image_picker.dart';
+class Add_sr extends StatefulWidget {
+  const Add_sr({super.key});
 
   @override
-  State<add_sr> createState() => _add_srState();
+  State<Add_sr> createState() => _add_srState();
 }
 
-class _add_srState extends State<add_sr> {
+class _add_srState extends State<Add_sr> {
+
+  XFile? image;
+
+  final ImagePicker picker = ImagePicker();
+
+  //we can upload image from camera or from gallery based on parameter
+  Future getImage(ImageSource media) async {
+    var img = await picker.pickImage(source: media);
+
+    setState(() {
+      image = img;
+    });
+  }
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController headquarterController = TextEditingController();
@@ -151,6 +165,7 @@ class _add_srState extends State<add_sr> {
                   height: 15,
                 ),
 
+
                 TextFormField(
                   controller:  passwordController,
                   focusNode: passwordFocusNode,
@@ -173,6 +188,24 @@ class _add_srState extends State<add_sr> {
                 ),
                 const SizedBox(
                   height: 15,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primarycolor,
+
+                  ),
+                  //if user click this button, user can upload image from gallery
+                  onPressed: () {
+                    // Navigator.pop(context);
+                    getImage(ImageSource.gallery);
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.image),
+                      Text('upoad profile',style: TextStyle(color: Colors.white, fontSize: 16),),
+
+                    ],
+                  ),
                 ),
                 SizedBox(
                   width: double.infinity,

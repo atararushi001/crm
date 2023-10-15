@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/Navbar.dart';
+import '../widgets/widgets.dart';
 
 class Home_page extends StatefulWidget {
   const Home_page({super.key});
@@ -17,22 +18,7 @@ class _home_pageState extends State<Home_page> {
     var primarycolor = Color(0xff3553C0);
     return Scaffold(
       drawer: navbar(),
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: primarycolor,
-        title: Text(
-          'Matrix',
-          style: TextStyle(color: Colors.white, fontSize: 16),
-        ),
-        actions: [
-          CircleAvatar(
-            backgroundImage: AssetImage('assets/img/profile.jpg'),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-        ],
-      ),
+      appBar:  appbar,
       body:Column(
         children: [
           Center(

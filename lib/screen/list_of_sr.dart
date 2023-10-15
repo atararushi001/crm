@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-
+import '../widgets/Navbar.dart';
+import '../widgets/widgets.dart';
+import 'add_sr.dart';
 
 class User {
   final String name;
@@ -14,7 +17,30 @@ class User {
   });
 }
 
+getuserdata() async {
+  List<User> users = [];
+  CollectionReference usersdata = FirebaseFirestore.instance.collection('user');
+  QuerySnapshot querySnapshot = await usersdata.get();
+  for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+    if (data != null) {
+      final String? name = data['name'] as String?;
+      final String? email = data['email'] as String?;
+      final String? profilepic = data['profile'] as String?;
 
+      if (name != null && email != null && profilepic != null) {
+        users.add(
+          User(
+            name: name,
+            email: email,
+            profilePicture: profilepic,
+          ),
+        );
+      }
+    }
+  }
+  return users;
+}
 
 class Sr_list extends StatefulWidget {
   @override
@@ -22,36 +48,56 @@ class Sr_list extends StatefulWidget {
 }
 
 class _Sr_listState extends State<Sr_list> {
-  final List<User> users = [
-    User(
-      name: 'John Doe',
-      email: 'john@example.com',
-      profilePicture: 'assets/img/profile.jpg',
-    ),
-    User(
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      profilePicture: 'assets/img/profile.jpg',
-    ),
-    // Add more users here
-  ];
+  @override
+  List<User> users = [];
+
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    List<User> loadedUsers = await getuserdata();
+    setState(() {
+      users = loadedUsers;
+    });
+  }
+  //  List<User> users = [
+  //   User(
+  //     name: 'John Doe',
+  //     email: 'john@example.com',
+  //     profilePicture: 'assets/img/profile.jpg',
+  //   ),
+  //   User(
+  //     name: 'Jane Smith',
+  //     email: 'jane@example.com',
+  //     profilePicture: 'assets/img/profile.jpg',
+  //   ),
+  //   // Add more users here
+  // ];
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'User Profiles',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('User Profiles'),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: UserList(users: users),
+    var primarycolor = Color(0xff3553C0);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      drawer: navbar(),
+      appBar:  appbar,
+      body: Column(
+        children: [
+          Expanded(
+            child: UserList(users: users),
+          ),
+          Container(
+            margin: EdgeInsets.all(16.0),
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/add_sr');
+              },
+              child: Icon(Icons.add),
             ),
-            AddUserButton(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -89,12 +135,11 @@ class UserCard extends StatelessWidget {
       child: ListTile(
         contentPadding: EdgeInsets.all(16.0),
         leading: CircleAvatar(
-          backgroundImage: AssetImage(user.profilePicture),
+          backgroundImage: NetworkImage(user.profilePicture),
         ),
         title: Text(user.name),
         subtitle: Text(user.email),
         trailing: Column(
-
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -138,8 +183,7 @@ class AddUserButton extends StatelessWidget {
       margin: EdgeInsets.all(16.0),
       child: FloatingActionButton(
         onPressed: () {
-          // Open the form to add a new user
-          // You can navigate to a new screen or show a modal bottom sheet
+          Navigator.pushNamed(context, '/add_sr');
         },
         child: Icon(Icons.add),
       ),

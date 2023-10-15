@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/Navbar.dart';
+import '../widgets/widgets.dart';
+
 
 class Route_list extends StatefulWidget {
   const Route_list({super.key});
@@ -12,9 +15,9 @@ class _Route_listState extends State<Route_list> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: AppBar(
-        title: Text('Route List'),
-      ),
+      backgroundColor: Colors.white,
+      drawer: navbar(),
+      appBar:  appbar,
       body: ListView.builder(
         itemCount: 5, // Replace with the actual number of locations
         itemBuilder: (context, index) {

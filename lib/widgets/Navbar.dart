@@ -31,7 +31,7 @@ class navbar extends StatelessWidget {
               leading: Icon(Icons.edit_note),
               title: Text('SR management'),
               onTap: () => {
-                    Navigator.pushNamed(context, '/add_sr'),
+                    Navigator.pushNamed(context, '/Sr_list'),
                   }),
           ListTile(
               leading: Icon(Icons.card_travel_sharp),

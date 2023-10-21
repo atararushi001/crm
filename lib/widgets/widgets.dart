@@ -60,3 +60,9 @@ Future showdialogs(context,String titletext , String contenttext) {
         ),
   );
 }
+
+Widget buildLoadingIndicator() {
+  return Center(
+    child: CircularProgressIndicator(),
+  );
+}

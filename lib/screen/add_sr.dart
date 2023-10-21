@@ -57,7 +57,19 @@ class _add_srState extends State<Add_sr> {
     String name = "";
     String password = "";
     var primarycolor = Color(0xff3553C0);
+    Map? data = ModalRoute.of(context)!.settings.arguments as Map?;
+if(data != null){
+  // print(data['name']);
+  nameController.text = data['name'];
+  emailController.text = data['email'];
+  headquarterController.text = data['email'];
+  addressController.text = data['email'];
+  passwordController.text = data['email'];
+}
+
+
     return Scaffold(
+
       backgroundColor: Colors.white,
       drawer: navbar(),
       appBar: appbar,
@@ -70,8 +82,7 @@ class _add_srState extends State<Add_sr> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  "ADD SR",
+                Text(data != null ? "Update SR" : "ADD SR"  ,
                   style: TextStyle(
                       color: primarycolor,
                       fontSize: 30,
@@ -207,11 +218,12 @@ class _add_srState extends State<Add_sr> {
                       final passwordValue = passwordController.text;
 
                       if (formkey.currentState!.validate()) {
-                        Add_srdata();
+                        data != null ?  update_srdata() :  Add_srdata()
+                       ;
                       }
                     },
-                    child: const Text(
-                      "Add",
+                    child:  Text(
+                      data != null ? "Update SR" : "ADD SR",
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
@@ -298,4 +310,30 @@ class _add_srState extends State<Add_sr> {
 
 
    }
+  Future<void> update_srdata() async {
+    Map? data = ModalRoute.of(this.context)!.settings.arguments as Map?;
+    final int? uiduserdata =  data?['user_uid']?.uid; // Assuming you have this value set
+
+    // Create a reference to the 'user' collection in Firestore
+    CollectionReference usersCollection = FirebaseFirestore.instance.collection('user');
+
+    // Find the document to update based on 'user_id' or 'user_uid'
+    QuerySnapshot userQuery = await usersCollection.where('user_id', isEqualTo: uiduserdata).get();
+    if (userQuery.docs.isNotEmpty) {
+      // Update the first document found with the provided user_id or user_uid
+      DocumentSnapshot userDoc = userQuery.docs[0];
+      await userDoc.reference.update({
+        'name': nameController.text,
+        'email': emailController.text,
+        'headquarter': headquarterController.text,
+        'address': addressController.text,
+        'password': passwordController.text,
+        'user_type': 2,
+      });
+
+      showdialogs(this.context, "dialog", "Update Successful");
+    } else {
+      print('User not found'); // Handle the case when the user to update is not found
+    }
+  }
 }

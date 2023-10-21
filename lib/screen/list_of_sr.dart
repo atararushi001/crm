@@ -5,37 +5,24 @@ import '../widgets/Navbar.dart';
 import '../widgets/widgets.dart';
 import 'add_sr.dart';
 
-class User {
-  final String name;
-  final String email;
-  final String profilePicture;
 
-  User({
-    required this.name,
-    required this.email,
-    required this.profilePicture,
-  });
-}
 
 getuserdata() async {
-  List<User> users = [];
+  // List<User> users = [];
+  List<Map> users = [];
   CollectionReference usersdata = FirebaseFirestore.instance.collection('user');
   QuerySnapshot querySnapshot = await usersdata.get();
   for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
     if (data != null) {
+      final String? uid = data['user_uid'] as String?;
       final String? name = data['name'] as String?;
       final String? email = data['email'] as String?;
       final String? profilepic = data['profile'] as String?;
 
-      if (name != null && email != null && profilepic != null) {
-        users.add(
-          User(
-            name: name,
-            email: email,
-            profilePicture: profilepic,
-          ),
-        );
+      if (name != null && email != null && profilepic != null  && uid != null) {
+
+        users.add(data);
       }
     }
   }
@@ -49,32 +36,22 @@ class Sr_list extends StatefulWidget {
 
 class _Sr_listState extends State<Sr_list> {
   @override
-  List<User> users = [];
-
+  List<Map> users = [];
+  bool _isLoading=true;
   void initState() {
     super.initState();
     _loadUserData();
   }
 
+
   Future<void> _loadUserData() async {
-    List<User> loadedUsers = await getuserdata();
+    List<Map> loadedUsers = await getuserdata();
     setState(() {
       users = loadedUsers;
+      _isLoading = false; // Set isLoading to false when data is loaded
     });
   }
-  //  List<User> users = [
-  //   User(
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     profilePicture: 'assets/img/profile.jpg',
-  //   ),
-  //   User(
-  //     name: 'Jane Smith',
-  //     email: 'jane@example.com',
-  //     profilePicture: 'assets/img/profile.jpg',
-  //   ),
-  //   // Add more users here
-  // ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +60,13 @@ class _Sr_listState extends State<Sr_list> {
       backgroundColor: Colors.white,
       drawer: navbar(),
       appBar:  appbar,
-      body: Column(
+      body:
+      _isLoading
+          ?buildLoadingIndicator()
+          :
+      Column(
         children: [
+
           Expanded(
             child: UserList(users: users),
           ),
@@ -104,7 +86,7 @@ class _Sr_listState extends State<Sr_list> {
 }
 
 class UserList extends StatelessWidget {
-  final List<User> users;
+  final List<Map> users;
 
   UserList({required this.users});
 
@@ -120,13 +102,14 @@ class UserList extends StatelessWidget {
 }
 
 class UserCard extends StatelessWidget {
-  final User user;
+  final Map user;
 
   UserCard({required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Card(
+
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
@@ -135,10 +118,10 @@ class UserCard extends StatelessWidget {
       child: ListTile(
         contentPadding: EdgeInsets.all(16.0),
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(user.profilePicture),
+          backgroundImage: NetworkImage(user['profile']),
         ),
-        title: Text(user.name),
-        subtitle: Text(user.email),
+        title: Text(user['name']),
+        subtitle: Text(user['email']),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -150,18 +133,18 @@ class UserCard extends StatelessWidget {
                 icon: Icon(Icons.edit),
                 iconSize: 22.0,
                 onPressed: () {
-                  // Add edit action here
+                    Navigator.pushNamed(context, '/add_sr',  arguments:user);
                 },
               ),
             ),
             Container(
-              height: 28,
+                height: 28,
               margin: EdgeInsets.only(top: 0.0, bottom: 0.0),
               child: IconButton(
                 icon: Icon(Icons.delete),
                 iconSize: 21.0,
                 onPressed: () {
-                  // Add delete action here
+
                 },
               ),
             ),

@@ -39,6 +39,7 @@ class _home_pageState extends State<Home_page> {
                 ),
               ),
             ),
+
           ),
           ),
           SizedBox(height: 20.0), // Add spacing between rows

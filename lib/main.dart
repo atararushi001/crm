@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
 
-      home: Add_route(),
+      home: Route_list(),
     );
   }
 }

@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/Navbar.dart';
 import '../widgets/widgets.dart';
-
 
 class Route_list extends StatefulWidget {
   const Route_list({super.key});
@@ -11,87 +11,135 @@ class Route_list extends StatefulWidget {
   State<Route_list> createState() => _Route_listState();
 }
 
+Future<List<Map<String, dynamic>>> getRouteData() async {
+  List<Map<String, dynamic>> routes = [];
+
+  CollectionReference routesCollection =
+      FirebaseFirestore.instance.collection('route');
+  QuerySnapshot querySnapshot = await routesCollection.get();
+
+  for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+    routes.add(data);
+  }
+
+  return routes;
+}
+
 class _Route_listState extends State<Route_list> {
+  bool _isLoading = true;
+  List<Map<String, dynamic>> routes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRouteData();
+  }
+
+  Future<void> _loadRouteData() async {
+    List<Map<String, dynamic>> loadedRoutes = await getRouteData();
+    setState(() {
+      routes = loadedRoutes;
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       drawer: navbar(),
-      appBar:  appbar,
-      body: ListView.builder(
-        itemCount: 5, // Replace with the actual number of locations
-        itemBuilder: (context, index) {
-          return buildLocationTile();
-        },
+      appBar: appbar,
+      body: _isLoading
+          ? buildLoadingIndicator()
+          : ListView.builder(
+              itemCount: routes.length,
+              itemBuilder: (context, index) {
+                return buildLocationTile(routes[index]);
+              },
+            ),
+      floatingActionButton: Center(
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/add_route');
+            },
+            child: Icon(Icons.add),
+          ),
+        ),
       ),
     );
   }
 
-  Widget buildLocationTile() {
+  Widget buildLocationTile(Map<String, dynamic> route) {
     Color iconColor = Color(0xFF3553C0);
-
+// print(route);
     return Card(
-        elevation: 4.0, // Adjust the elevation for the shadow effect
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0), // Adjust the radius for rounded corners
+      elevation: 4.0, // Adjust the elevation for the shadow effect
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+            12.0), // Adjust the radius for rounded corners
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.all(16),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.location_on,
+              color: iconColor,
+            ),
+            Icon(
+              Icons.person,
+              color: iconColor,
+            ), // Customer icon
+          ],
         ),
-        child: ListTile(
-            contentPadding: EdgeInsets.all(16),
-            leading: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.location_on,
+        title: Text(route['name']),
+        subtitle: Text('Total Customers: 10',
+            style: TextStyle(
+                color: Colors
+                    .black87)), // Replace with the actual number of customers
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Container(
+              height: 28,
+              margin: EdgeInsets.only(top: 0.0, bottom: 0.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.edit,
                   color: iconColor,
                 ),
-                Icon(
-                  Icons.person,
+                iconSize: 22.0,
+                onPressed: () {
+                  // Add edit action here
+                },
+              ),
+            ),
+            Container(
+              height: 28,
+              margin: EdgeInsets.only(top: 0.0, bottom: 0.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.delete,
                   color: iconColor,
-                ), // Customer icon
-              ],
-            ),
-            title: Text('Route Name'),
-            subtitle: Text('Total Customers: 10', style: TextStyle(color: Colors.black87)), // Replace with the actual number of customers
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  height: 28,
-                  margin: EdgeInsets.only(top: 0.0, bottom: 0.0),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.edit,
-                      color: iconColor,
-                    ),
-                    iconSize: 22.0,
-                    onPressed: () {
-                      // Add edit action here
-                    },
-                  ),
                 ),
-                Container(
-                  height: 28,
-                  margin: EdgeInsets.only(top: 0.0, bottom: 0.0),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: iconColor,
-                    ),
-                    iconSize: 21.0,
-                    onPressed: () {
-                      // Add delete action here
-                    },
-                  ),
-                ),
-              ],
+                iconSize: 21.0,
+                onPressed: () {
+                  // Add delete action here
+                },
+              ),
             ),
-            onTap: () {
-              // Add navigation or action when a user is tapped
-              // For example, navigate to a detailed user profile page
-            },
+          ],
         ),
-        );
-
+        onTap: () {
+          Navigator.pushNamed(context, '/add_route');
+       
+        },
+      ),
+    );
   }
 }

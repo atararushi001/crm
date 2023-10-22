@@ -7,10 +7,9 @@ import 'package:crm/screen/add_sr.dart';
 import 'package:crm/screen/home_page.dart';
 import 'package:crm/screen/list_of_sr.dart';
 import 'package:crm/screen/login_page.dart';
+import 'package:crm/screen/placeorder.dart';
 import 'package:crm/screen/product_list.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 Future main() async {
@@ -37,7 +36,6 @@ class MyApp extends StatelessWidget {
         '/Customer_list': (context) => Customer_list(),
         '/add_product': (context) => Add_product(),
         '/Product_list': (context) => Product_list()
-
       },
       title: 'CRM',
       theme: ThemeData(
@@ -47,7 +45,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
 
-      home: Product_list(),
+      home: OrderPlacementScreen(),
     );
   }
 }

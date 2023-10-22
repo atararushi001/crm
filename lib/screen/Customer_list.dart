@@ -136,7 +136,7 @@ class _CustomerListState extends State<Customer_list> {
       ],
     ),
     onTap: () {
-    // Handle tap action here
+      Navigator.pushNamed(context, '/Add_Customer', arguments: route);
     },
     ),
     );

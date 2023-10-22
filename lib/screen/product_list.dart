@@ -7,29 +7,6 @@ import '../widgets/widgets.dart';
 import 'add_sr.dart';
 
 
-
-getuserdata() async {
-  // List<User> users = [];
-  List<Map> users = [];
-  CollectionReference usersdata = FirebaseFirestore.instance.collection('user');
-  QuerySnapshot querySnapshot = await usersdata.get();
-  for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    if (data != null) {
-      final String? uid = data['user_uid'] as String?;
-      final String? name = data['name'] as String?;
-      final String? email = data['email'] as String?;
-      final String? profilepic = data['profile'] as String?;
-
-      if (name != null && email != null && profilepic != null  && uid != null) {
-
-        users.add(data);
-      }
-    }
-  }
-  return users;
-}
-
 class Product_list extends StatefulWidget {
   @override
   State<Product_list> createState() => _Product_listState();

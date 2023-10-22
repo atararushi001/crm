@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-
 Future<List<Map<String, dynamic>>> getData(String collecton) async {
   List<Map<String, dynamic>> routes = [];
 
@@ -20,6 +19,10 @@ Future<List<Map<String, dynamic>>> getData(String collecton) async {
 
   return routes;
 }
+
+
+
+
 Future<String?> uploadphto(image) async {
   try {
     FirebaseStorage storage = FirebaseStorage.instance;

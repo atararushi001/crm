@@ -52,7 +52,7 @@ class _Add_CustomerState extends State<Add_Customer> {
   Widget build(BuildContext context) {
     Map? data = ModalRoute.of(context)!.settings.arguments as Map?;
     uid = data?['uid'];
-   print(data);
+   // print(data?['uid']);
     final formkey = GlobalKey<FormState>();
 
 

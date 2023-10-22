@@ -5,88 +5,85 @@ import '../widgets/Navbar.dart';
 import '../widgets/widgets.dart';
 
 class Customer_list extends StatefulWidget {
-  const Customer_list({super.key});
+  const Customer_list({Key? key}) : super(key: key);
 
   @override
-  State<Customer_list> createState() => _Customer_listtState();
+  _CustomerListState createState() => _CustomerListState();
 }
 
-Future<List<Map<String, dynamic>>> getRouteData() async {
+Future<List<Map<String, dynamic>>> getRouteData(BuildContext context) async {
   List<Map<String, dynamic>> routes = [];
+  try {
+    Map? data = ModalRoute.of(context)!.settings.arguments as Map?;
+    if (data == null || data['uid'] == null) {
+      print('Invalid data or UID is null.');
+      return routes;
+    }
+    String uid = data['uid']; // Extract 'uid' separately for logging
 
-  CollectionReference routesCollection =
-  FirebaseFirestore.instance.collection('Customer');
-  QuerySnapshot querySnapshot = await routesCollection.get();
+    CollectionReference customersCollection = FirebaseFirestore.instance.collection('Customer');
+    QuerySnapshot querySnapshot = await customersCollection.where('route_uid', isEqualTo: uid).get();
 
-  for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-    // String uid = documentSnapshot.id;
-    // print(uid);
-    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    // data['uid'] = uid;
-    routes.add(data);
+    print('UID: $uid'); // Log the UID
+    print('Number of Documents: ${querySnapshot.size}'); // Log the number of documents
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> documentData = documentSnapshot.data() as Map<String, dynamic>;
+      routes.add(documentData);
+    }
+  } catch (e, stackTrace) {
+    print('Error fetching data: $e');
+    print('Stack Trace: $stackTrace');
   }
 
   return routes;
 }
 
-class _Customer_listtState extends State<Customer_list> {
-  bool _isLoading = true;
-  List<Map<String, dynamic>> routes = [];
 
-  @override
-  void initState() {
-    super.initState();
-    _loadRouteData();
-  }
-
-  Future<void> _loadRouteData() async {
-    List<Map<String, dynamic>> loadedRoutes = await getRouteData();
-    setState(() {
-      routes = loadedRoutes;
-      _isLoading = false;
-    });
-  }
-
+class _CustomerListState extends State<Customer_list> {
   @override
   Widget build(BuildContext context) {
-    // print(credential['user_type']);
-
-
-
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: navbar(),
       appBar: appbar,
-      body: _isLoading
-          ? buildLoadingIndicator()
-          : ListView.builder(
-        itemCount: routes.length,
-        itemBuilder: (context, index) {
-          return buildLocationTile(routes[index]);
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: getRouteData(context),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No data available.'));
+          } else {
+            List<Map<String, dynamic>> routes = snapshot.data!;
+            return ListView.builder(
+              itemCount: routes.length,
+              itemBuilder: (context, index) {
+                return buildLocationTile(routes[index]);
+              },
+            );
+          }
         },
       ),
-      floatingActionButton: Center(
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/add_route');
-            },
-            child: Icon(Icons.add),
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Map? routedata = ModalRoute.of(context)!.settings.arguments as Map?;
+          Navigator.pushNamed(context, '/Add_Customer', arguments: routedata);
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
 
   Widget buildLocationTile(Map<String, dynamic> route) {
     Color iconColor = Color(0xFF3553C0);
-// print(route);
+
     return Card(
-      elevation: 4.0, // Adjust the elevation for the shadow effect
+      elevation: 4.0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-            12.0), // Adjust the radius for rounded corners
+        borderRadius: BorderRadius.circular(12.0),
       ),
       child: ListTile(
         contentPadding: EdgeInsets.all(16),
@@ -94,60 +91,54 @@ class _Customer_listtState extends State<Customer_list> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.location_on,
+              Icons.person,
               color: iconColor,
             ),
             Icon(
-              Icons.person,
+              Icons.location_city,
               color: iconColor,
-            ), // Customer icon
+            ),
           ],
         ),
         title: Text(route['name']),
-        subtitle: Text('Total Customers: 10',
-            style: TextStyle(
-                color: Colors
-                    .black87)), // Replace with the actual number of customers
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Container(
-              height: 28,
-              margin: EdgeInsets.only(top: 0.0, bottom: 0.0),
-              child: IconButton(
-                icon: Icon(
-                  Icons.edit,
-                  color: iconColor,
-                ),
-                iconSize: 22.0,
-                onPressed: () {
-                  // Add edit action here
-                },
-              ),
+          Container(
+          height: 28,
+          margin: EdgeInsets.only(top: 0.0, bottom: 0.0),
+          child: IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: iconColor,
             ),
-            Container(
-              height: 28,
-              margin: EdgeInsets.only(top: 0.0, bottom: 0.0),
-              child: IconButton(
-                icon: Icon(
-                  Icons.delete,
-                  color: iconColor,
-                ),
-                iconSize: 21.0,
-                onPressed: () {
-                  // Add delete action here
-                },
-              ),
-            ),
-          ],
+            iconSize: 22.0,
+            onPressed: () {
+              // Add edit action here
+            },
+          ),
         ),
-        onTap: () {
-          credential['user_type'] ==2 ?
-          Navigator.pushNamed(context, '/Add_Customer',  arguments:route)
-              : Navigator.pushNamed(context, '/Add_Customer',  arguments:route);
-        },
+        Container(
+            height: 28,
+
+        child: IconButton(
+          icon: Icon(
+            Icons.delete,
+            color: iconColor,
+          ),
+          iconSize: 21.0,
+          onPressed: () {
+            // Add delete action here
+          },
+        ),
       ),
+      ],
+    ),
+    onTap: () {
+    // Handle tap action here
+    },
+    ),
     );
   }
 }

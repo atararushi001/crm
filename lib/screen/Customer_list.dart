@@ -4,32 +4,32 @@ import 'package:flutter/material.dart';
 import '../widgets/Navbar.dart';
 import '../widgets/widgets.dart';
 
-class Route_list extends StatefulWidget {
-  const Route_list({super.key});
+class Customer_list extends StatefulWidget {
+  const Customer_list({super.key});
 
   @override
-  State<Route_list> createState() => _Route_listState();
+  State<Customer_list> createState() => _Customer_listtState();
 }
 
 Future<List<Map<String, dynamic>>> getRouteData() async {
   List<Map<String, dynamic>> routes = [];
 
   CollectionReference routesCollection =
-      FirebaseFirestore.instance.collection('route');
+  FirebaseFirestore.instance.collection('Customer');
   QuerySnapshot querySnapshot = await routesCollection.get();
 
   for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-    String uid = documentSnapshot.id;
+    // String uid = documentSnapshot.id;
     // print(uid);
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    data['uid'] = uid;
+    // data['uid'] = uid;
     routes.add(data);
   }
 
   return routes;
 }
 
-class _Route_listState extends State<Route_list> {
+class _Customer_listtState extends State<Customer_list> {
   bool _isLoading = true;
   List<Map<String, dynamic>> routes = [];
 
@@ -49,7 +49,7 @@ class _Route_listState extends State<Route_list> {
 
   @override
   Widget build(BuildContext context) {
-     // print(credential['user_type']);
+    // print(credential['user_type']);
 
 
 
@@ -60,11 +60,11 @@ class _Route_listState extends State<Route_list> {
       body: _isLoading
           ? buildLoadingIndicator()
           : ListView.builder(
-              itemCount: routes.length,
-              itemBuilder: (context, index) {
-                return buildLocationTile(routes[index]);
-              },
-            ),
+        itemCount: routes.length,
+        itemBuilder: (context, index) {
+          return buildLocationTile(routes[index]);
+        },
+      ),
       floatingActionButton: Center(
         child: Align(
           alignment: Alignment.bottomCenter,
@@ -143,10 +143,9 @@ class _Route_listState extends State<Route_list> {
           ],
         ),
         onTap: () {
-          // credential['user_type'] ==2 ?
-          // Navigator.pushNamed(context, '/Add_Customer',  arguments:route)
-          // :
-          Navigator.pushNamed(context, '/Customer_list',  arguments:route);
+          credential['user_type'] ==2 ?
+          Navigator.pushNamed(context, '/Add_Customer',  arguments:route)
+              : Navigator.pushNamed(context, '/Add_Customer',  arguments:route);
         },
       ),
     );

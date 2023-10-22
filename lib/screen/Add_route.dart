@@ -16,10 +16,10 @@ class Add_route extends StatefulWidget {
   const Add_route({super.key});
 
   @override
-  State<Add_route> createState() => _add_srState();
+  State<Add_route> createState() => _Add_routeState();
 }
 
-class _add_srState extends State<Add_route> {
+class _Add_routeState extends State<Add_route> {
   File? image;
 
   final ImagePicker picker = ImagePicker();

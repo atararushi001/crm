@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crm/screen/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../widgets/widgets.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -173,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (ctx) => const Home_page(),
+        builder: (ctx) => const HomePage(),
       ),
     );
   }
@@ -182,9 +185,32 @@ class _LoginPageState extends State<LoginPage> {
     if (formKey.currentState!.validate()) {
       // print(email);
       try {
-        final credential = await FirebaseAuth.instance
+
+         credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
-        userLogedin();
+
+
+         String userUid = credential.user.uid;
+
+         // Query the Firestore collection to find the document with the matching UID
+         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+             .collection('user')
+             .where('user_uid', isEqualTo: userUid)
+             .get();
+
+         if (querySnapshot.docs.isNotEmpty) {
+           // User document found, you can access user data
+           DocumentSnapshot userDoc = querySnapshot.docs.first;
+           Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+           credential = userData;
+         } else {
+           // User document not found
+           print('User document for UID $userUid not found.');
+         }
+
+         userLogedin();
+
+
       } on FirebaseAuthException catch (e) {
         print(e.code);
         if (e.code == 'INVALID_LOGIN_CREDENTIALS') {

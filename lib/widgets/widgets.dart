@@ -4,21 +4,28 @@
 import 'package:flutter/material.dart';
 const  primarycolorbtn = Color(0xff3553C0);
 const  errorcolor = Color(0xff3553C0);
+var credential;
 const textInputDecoration = InputDecoration(
-  labelStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w300),
-
+  labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w300),
   focusedBorder: OutlineInputBorder(
-
-    borderSide: BorderSide(color: primarycolorbtn,width: 3),
-    // borderRadius: BorderRadius.circular(10,30,44,20),
+    borderSide: BorderSide(color: primarycolorbtn, width: 2),
+    borderRadius: BorderRadius.all(Radius.circular(10)), // Adjust the radius as needed
   ),
   enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: primarycolorbtn,width: 2),
+    borderSide: BorderSide(color: primarycolorbtn, width: 2),
+    borderRadius: BorderRadius.all(Radius.circular(10)),
   ),
   errorBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: primarycolorbtn,width: 2),
+    borderSide: BorderSide(color: Colors.red, width: 2),
+    borderRadius: BorderRadius.all(Radius.circular(10)),
   ),
+  focusedErrorBorder: OutlineInputBorder(
+    borderSide: BorderSide(color:  Colors.red, width: 2),
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+  ),
+
 );
+
 var primarycolor = Color(0xff3553C0);
 var appbar =  AppBar(
   iconTheme: IconThemeData(color: Colors.white),

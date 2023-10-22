@@ -49,7 +49,7 @@ class navbar extends StatelessWidget {
               leading: Icon(Icons.perm_identity),
               title: Text('Customer'),
               onTap: () => {
-                    Navigator.pushNamed(context, '/home'),
+                    Navigator.pushNamed(context, '/Customer_list'),
                   }),
           ListTile(
               leading: Icon(Icons.attach_money),

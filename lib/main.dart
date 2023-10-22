@@ -1,4 +1,5 @@
 import 'package:crm/screen/Add_Customer.dart';
+import 'package:crm/screen/Add_product.dart';
 import 'package:crm/screen/Add_route.dart';
 import 'package:crm/screen/Customer_list.dart';
 import 'package:crm/screen/Route_list.dart';
@@ -6,6 +7,7 @@ import 'package:crm/screen/add_sr.dart';
 import 'package:crm/screen/home_page.dart';
 import 'package:crm/screen/list_of_sr.dart';
 import 'package:crm/screen/login_page.dart';
+import 'package:crm/screen/product_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -32,8 +34,9 @@ class MyApp extends StatelessWidget {
         '/add_route': (context) => Add_route(),
         '/route_list': (context) => Route_list(),
         '/Add_Customer': (context) => Add_Customer(),
-        '/Customer_list': (context) => Customer_list()
-
+        '/Customer_list': (context) => Customer_list(),
+        '/add_product': (context) => Add_product(),
+        '/Product_list': (context) => Product_list()
 
       },
       title: 'CRM',
@@ -44,7 +47,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
 
-      home: Route_list(),
+      home: Product_list(),
     );
   }
 }

@@ -37,7 +37,7 @@ class navbar extends StatelessWidget {
               leading: Icon(Icons.card_travel_sharp),
               title: Text('Product'),
               onTap: () => {
-                    Navigator.pushNamed(context, '/home'),
+                    Navigator.pushNamed(context, '/Product_list'),
                   }),
           ListTile(
               leading: Icon(Icons.add_business_rounded),

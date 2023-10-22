@@ -5,10 +5,9 @@ import '../widgets/Navbar.dart';
 import '../widgets/widgets.dart';
 import 'add_sr.dart';
 
-
+typedef void VoidCallback();
 
 getuserdata() async {
-  // List<User> users = [];
   List<Map> users = [];
   CollectionReference usersdata = FirebaseFirestore.instance.collection('user');
   QuerySnapshot querySnapshot = await usersdata.get();
@@ -20,8 +19,7 @@ getuserdata() async {
       final String? email = data['email'] as String?;
       final String? profilepic = data['profile'] as String?;
 
-      if (name != null && email != null && profilepic != null  && uid != null) {
-
+      if (name != null && email != null && profilepic != null && uid != null) {
         users.add(data);
       }
     }
@@ -35,40 +33,35 @@ class Sr_list extends StatefulWidget {
 }
 
 class _Sr_listState extends State<Sr_list> {
-  @override
   List<Map> users = [];
-  bool _isLoading=true;
+  bool _isLoading = true;
+
+  @override
   void initState() {
     super.initState();
     _loadUserData();
   }
 
-
   Future<void> _loadUserData() async {
     List<Map> loadedUsers = await getuserdata();
     setState(() {
       users = loadedUsers;
-      _isLoading = false; // Set isLoading to false when data is loaded
+      _isLoading = false;
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    var primarycolor = Color(0xff3553C0);
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: navbar(),
-      appBar:  appbar,
-      body:
-      _isLoading
-          ?buildLoadingIndicator()
-          :
-      Column(
+      appBar: appbar,
+      body: _isLoading
+          ? buildLoadingIndicator()
+          : Column(
         children: [
-
           Expanded(
-            child: UserList(users: users),
+            child: UserList(users: users, onUserDelete: _loadUserData),
           ),
           Container(
             margin: EdgeInsets.all(16.0),
@@ -87,15 +80,16 @@ class _Sr_listState extends State<Sr_list> {
 
 class UserList extends StatelessWidget {
   final List<Map> users;
+  final VoidCallback onUserDelete;
 
-  UserList({required this.users});
+  UserList({required this.users, required this.onUserDelete});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: users.length,
       itemBuilder: (context, index) {
-        return UserCard(user: users[index]);
+        return UserCard(user: users[index], onDelete: onUserDelete);
       },
     );
   }
@@ -103,8 +97,10 @@ class UserList extends StatelessWidget {
 
 class UserCard extends StatelessWidget {
   final Map user;
+  final VoidCallback onDelete;
 
-  UserCard({required this.user});
+  UserCard({required this.user, required this.onDelete});
+
   void _deleteUser(BuildContext context) {
     String userUid = user['user_uid'];
     CollectionReference usersCollection = FirebaseFirestore.instance.collection('user');
@@ -119,8 +115,8 @@ class UserCard extends StatelessWidget {
             content: Text('SR deleted successfully'),
           ));
 
-          // Reload the user list after deletion
-          // _loadUserData();
+          // Call the onDelete callback to reload user data
+          onDelete();
         }).catchError((error) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Error deleting SR: $error'),
@@ -130,11 +126,9 @@ class UserCard extends StatelessWidget {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Card(
-
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
@@ -158,18 +152,17 @@ class UserCard extends StatelessWidget {
                 icon: Icon(Icons.edit),
                 iconSize: 22.0,
                 onPressed: () {
-                    Navigator.pushNamed(context, '/add_sr',  arguments:user);
+                  Navigator.pushNamed(context, '/add_sr', arguments: user);
                 },
               ),
             ),
             Container(
-                height: 28,
+              height: 28,
               margin: EdgeInsets.only(top: 0.0, bottom: 0.0),
               child: IconButton(
                 icon: Icon(Icons.delete),
                 iconSize: 21.0,
                 onPressed: () {
-
                   _deleteUser(context);
                 },
               ),
@@ -182,28 +175,5 @@ class UserCard extends StatelessWidget {
         },
       ),
     );
-  }
-}
-
-class AddUserButton extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return
- credential['user_type'] == 0 ?
-      Container(
-
-      margin: EdgeInsets.all(16.0),
-      child: FloatingActionButton(
-        onPressed: () {
-
-          Navigator.pushNamed(context, '/add_sr');
-        },
-
-
-        child:  Icon(Icons.add),
-      ),
-    )
-    : Container();
   }
 }

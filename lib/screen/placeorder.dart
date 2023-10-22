@@ -110,17 +110,21 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
               onPressed: addToOrder,
               child: Text('Add Product'),
             ),
+            ElevatedButton(
+              onPressed: placeorder,
+              child: Text('Place Order'),
+            ),
             SizedBox(height: 10),
-            if (orderList.isNotEmpty)
-              Text(
-                'Selected Products:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            for (var item in orderList)
-              Text('${item['product']} - Quantity: ${item['quantity']}'),
+            // if (orderList.isNotEmpty)
+            //   Text(
+            //     'Selected Products:',
+            //     style: TextStyle(
+            //       fontSize: 18,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // for (var item in orderList)
+            //   Text('${item['product']} - Quantity: ${item['quantity']}'),
           ],
         ),
       ),
@@ -128,17 +132,42 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
   }
 
   void addToOrder() {
-    if (selectedProduct.isNotEmpty) {
+    // Check if the selected product is already in the order list
+    int existingProductIndex = orderList.indexWhere((item) => item['product'] == selectedProduct);
+
+    if (existingProductIndex != -1) {
+      // If the product is already in the order list, update the quantity
+      orderList[existingProductIndex]['quantity'] = quantity;
+    } else {
+      // If the product is not in the order list, add it with the given quantity
       orderList.add({
         'product': selectedProduct,
         'quantity': quantity,
       });
-
-      setState(() {
-        selectedProduct = 'test2'; // Reset to 'test2' instead of 'selectedProduct'
-        quantity = 1;
-      });
     }
+
+    // Reset the selected product and quantity
+    setState(() {
+      selectedProduct = 'test2'; // Reset to 'test2' instead of 'selectedProduct'
+      quantity = 0;
+    });
+  }
+
+  Future<void> placeorder() async {
+    CollectionReference routecollection = FirebaseFirestore.instance.collection('order');
+    int i = 0;
+
+    for (var item in orderList) {
+      // Add the product name with an incremented index (i)
+      await routecollection.add({
+        'product_name $i': item['product'],
+        'quantity' : item['quantity']
+      });
+
+      i++; // Increment i by 1 for the next product
+    }
+
+    showdialogs(this.context, "dialog", "Added Successful");
   }
 
 }

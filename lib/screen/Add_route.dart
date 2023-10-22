@@ -128,8 +128,7 @@ class _Add_routeState extends State<Add_route> {
 
   Add_srdata() async {
 
-    CollectionReference routecollection =
-    FirebaseFirestore.instance.collection('route');
+    CollectionReference routecollection = FirebaseFirestore.instance.collection('route');
 
     // Add the new document with an incremented user_id
     await routecollection.add({

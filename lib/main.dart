@@ -3,6 +3,7 @@ import 'package:crm/screen/Add_product.dart';
 import 'package:crm/screen/Add_route.dart';
 import 'package:crm/screen/Customer_list.dart';
 import 'package:crm/screen/Route_list.dart';
+import 'package:crm/screen/SplashScreen.dart';
 import 'package:crm/screen/add_sr.dart';
 import 'package:crm/screen/home_page.dart';
 import 'package:crm/screen/list_of_sr.dart';
@@ -35,7 +36,9 @@ class MyApp extends StatelessWidget {
         '/Add_Customer': (context) => Add_Customer(),
         '/Customer_list': (context) => Customer_list(),
         '/add_product': (context) => Add_product(),
-        '/Product_list': (context) => Product_list()
+        '/Product_list': (context) => Product_list(),
+        '/OrderPlacement': (context) => OrderPlacementScreen(),
+
       },
       title: 'CRM',
       theme: ThemeData(
@@ -45,7 +48,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
 
-      home: OrderPlacementScreen(),
+      home: SplashScreen(),
     );
   }
 }

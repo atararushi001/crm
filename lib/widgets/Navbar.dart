@@ -1,3 +1,4 @@
+import 'package:crm/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class navbar extends StatelessWidget {
@@ -27,12 +28,14 @@ class navbar extends StatelessWidget {
               onTap: () => {
                     Navigator.pushNamed(context, '/home'),
                   }),
+          if (credential['user_type'] == 0)
           ListTile(
               leading: Icon(Icons.edit_note),
               title: Text('SR management'),
               onTap: () => {
                     Navigator.pushNamed(context, '/Sr_list'),
                   }),
+          if (credential['user_type'] == 0)
           ListTile(
               leading: Icon(Icons.card_travel_sharp),
               title: Text('Product'),

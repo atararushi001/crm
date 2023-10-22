@@ -65,7 +65,10 @@ class _Route_listState extends State<Route_list> {
                 return buildLocationTile(routes[index]);
               },
             ),
-      floatingActionButton: Center(
+
+      floatingActionButton:
+      credential['user_type'] == 0 ?
+      Center(
         child: Align(
           alignment: Alignment.bottomCenter,
           child: FloatingActionButton(
@@ -75,7 +78,8 @@ class _Route_listState extends State<Route_list> {
             child: Icon(Icons.add),
           ),
         ),
-      ),
+      )
+          :  Center()
     );
   }
 
@@ -106,8 +110,7 @@ class _Route_listState extends State<Route_list> {
         title: Text(route['name']),
         subtitle: Text('Total Customers: 10',
             style: TextStyle(
-                color: Colors
-                    .black87)), // Replace with the actual number of customers
+                color: Colors.black87)), // Replace with the actual number of customers
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,

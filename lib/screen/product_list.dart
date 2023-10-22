@@ -7,6 +7,8 @@ import '../widgets/widgets.dart';
 import 'add_sr.dart';
 
 
+
+
 class Product_list extends StatefulWidget {
   @override
   State<Product_list> createState() => _Product_listState();
@@ -129,8 +131,6 @@ class dataCard extends StatelessWidget {
           ],
         ),
         onTap: () {
-          // Add navigation or action when a user is tapped
-          // For example, navigate to a detailed user profile page
         },
       ),
     );

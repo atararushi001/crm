@@ -105,6 +105,31 @@ class UserCard extends StatelessWidget {
   final Map user;
 
   UserCard({required this.user});
+  void _deleteUser(BuildContext context) {
+    String userUid = user['user_uid'];
+    CollectionReference usersCollection = FirebaseFirestore.instance.collection('user');
+
+    usersCollection
+        .where('user_uid', isEqualTo: userUid)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        doc.reference.delete().then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('SR deleted successfully'),
+          ));
+
+          // Reload the user list after deletion
+          // _loadUserData();
+        }).catchError((error) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Error deleting SR: $error'),
+          ));
+        });
+      });
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +170,7 @@ class UserCard extends StatelessWidget {
                 iconSize: 21.0,
                 onPressed: () {
 
+                  _deleteUser(context);
                 },
               ),
             ),
@@ -160,16 +186,24 @@ class UserCard extends StatelessWidget {
 }
 
 class AddUserButton extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return
+ credential['user_type'] == 0 ?
+      Container(
+
       margin: EdgeInsets.all(16.0),
       child: FloatingActionButton(
         onPressed: () {
+
           Navigator.pushNamed(context, '/add_sr');
         },
-        child: Icon(Icons.add),
+
+
+        child:  Icon(Icons.add),
       ),
-    );
+    )
+    : Container();
   }
 }

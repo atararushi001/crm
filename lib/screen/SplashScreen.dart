@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     // Simulate loading time by adding a delay
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushNamed(this.context, '/home');
+      Navigator.pushNamed(this.context, '/login');
     });
   }
 

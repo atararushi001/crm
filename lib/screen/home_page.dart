@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/Navbar.dart';
+import '../widgets/widgets.dart';
+import 'Route_list.dart';
+import 'Sales_page.dart';
 import 'list_of_sr.dart';
 // Import the correct page
 
@@ -16,23 +19,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+
+      backgroundColor: Colors.white,
       drawer: navbar(),
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: primaryColor,
-        title: Text(
-          'Matrix',
-          style: TextStyle(color: Colors.white, fontSize: 16),
-        ),
-        actions: [
-          CircleAvatar(
-            backgroundImage: AssetImage('assets/img/profile.jpg'),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-        ],
-      ),
+      appBar: appbar,
       body: Column(
         children: [
           Center(
@@ -62,20 +53,17 @@ class _HomePageState extends State<HomePage> {
                             Padding(
                               padding: const EdgeInsets.all(0.0),
                               child: Image.asset(
-                                'assets/dataicons/target.jpg',
+                                'assets/dataicons/target.png',
                                 width: 155, // Adjust the width as needed
                                 height: 140, // Adjust the height as needed
                               ),
                             ),
                             Expanded(
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      SizedBox(width: 10), // Adjusted spacing
                                       Text(
                                         '₹',
                                         style: TextStyle(
@@ -103,7 +91,6 @@ class _HomePageState extends State<HomePage> {
                                     ],
                                   ),
                                   SizedBox(height: 8),
-                                  SizedBox(width: 10), // Adjusted spacing
                                   Text(
                                     'Target',
                                     style: TextStyle(
@@ -130,9 +117,9 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildClickableIconContainer('assets/dataicons/sr.jpg', 'SR', Sr_list()),
+              buildClickableIconContainer('assets/dataicons/sr.png', 'SR', Sr_list()),
               SizedBox(width: 20.0), // Add spacing between columns
-              buildClickableIconContainer('assets/dataicons/route.jpg', 'Route', Sr_list()),
+              buildClickableIconContainer('assets/dataicons/route.png', 'Route', Route_list()),
             ],
           ),
           SizedBox(height: 20.0), // Add spacing between rows
@@ -141,9 +128,9 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildClickableIconContainer('assets/dataicons/sales.jpg', 'Sales', Sr_list()),
-              SizedBox(width: 20.0), // Add spacing between columns
-              buildClickableIconContainer('assets/dataicons/customer.jpg', 'Customer', Sr_list()),
+              buildClickableIconContainer('assets/dataicons/sales.png', 'Sales', SalesPage()),
+              SizedBox(width: 20.0),
+              buildClickableIconContainer('assets/dataicons/customer.png', 'Customer', Sr_list()),
             ],
           ),
           SizedBox(height: 20.0), // Add spacing between rows
@@ -162,7 +149,7 @@ class _HomePageState extends State<HomePage> {
         );
       },
       child: Container(
-        width: 180,
+        width: 160,
         height: 130,
         child: Card(
           color: Colors.white,
@@ -181,7 +168,6 @@ class _HomePageState extends State<HomePage> {
                     width: 80, // Adjust the width as needed
                     height: 80, // Adjust the height as needed
                   ),
-                  SizedBox(height: 4),
                   Text(
                     text,
                     style: TextStyle(

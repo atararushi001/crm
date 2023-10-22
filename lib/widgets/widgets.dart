@@ -36,7 +36,7 @@ var appbar =  AppBar(
   ),
   actions: [
     CircleAvatar(
-      backgroundImage: AssetImage('assets/img/profile.jpg'),
+      backgroundImage:  NetworkImage(credential['profile']),
 
     ),
     const SizedBox(
